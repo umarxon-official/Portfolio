@@ -73,7 +73,7 @@ document.getElementById("contact").addEventListener("submit", async (e) => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/send-message", {
+    const response = await fetch("portfolio-backends-ten.vercel.app", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
