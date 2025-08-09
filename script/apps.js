@@ -71,19 +71,30 @@ document.getElementById("contact").addEventListener("submit", async (e) => {
     message: form.message.value,
   };
 
-  try {
-    const response = await fetch("portfolio-backends-ten.vercel.app", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    alert('Ваше сообщение успешно отправлено!');
-    form.reset();
-  } catch (error) {
+ fetch('https://portfolio-backends-ten.vercel.app/api/send-message', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    name: 'Umarxon',
+    email: 'umar@example.com',
+    phone: '998901234567',
+    message: 'Salom, bu test xabar!',
+  }),
+})
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("Успешно отправлено ✅");
+    } else {
+      alert("Произошла ошибка ❌");
+    }
+  })
+  .catch(error => {
     console.error(error);
-    alert("Произошла ошибка при отправке сообщения. Попробуйте ещё раз.");
-  }
+    alert("Произошла ошибка при отправке ❌");
+  });
   e.reset()
 });
 
