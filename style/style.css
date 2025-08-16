@@ -140,7 +140,7 @@ span{
 }
 .social_icon a:hover{
     color: rgb(0, 0, 0);
-    transform: scale(1.3)translateY(-5px);
+    transform: scale(1.3)translateY(-10px);
     background:var(--main-color);
     box-shadow:0 0 25px var(--main-color)
 }
@@ -945,3 +945,37 @@ span{
 .hides{
     display: none;
 }
+.modalla{
+    position: fixed;
+    top: 0;
+    left: 0;
+    justify-content : center;
+    align-items: center;
+    display: none;
+    background-color: black;
+}
+.mmaodal{
+    display: flex;
+    flex-direction: column;
+    font-size: 5vb;
+}
+  #customAlert {
+      position: fixed;
+      top: 2vb;
+      right: 42vw;
+      background-color: #4caf50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+    }
+    #customAlert.show {
+      opacity: 1;
+      pointer-events: auto;
+    }   

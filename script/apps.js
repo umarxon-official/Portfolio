@@ -59,42 +59,77 @@ closes.addEventListener('click', ()=>{
   pp.classList.add('hides')
 })
 
-document.getElementById("contact").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    const form = document.querySelector('.form');
+    const messagesList = document.querySelector('.mmaodal');
+    const customAlert = document.getElementById('customAlert');
 
-  const form = e.target;
+    function loadMessages() {
+      messagesList.innerHTML = '';
+      const messages = JSON.parse(localStorage.getItem('messages')) || [];
+      messages.forEach((msg, index) => {
+        const div = document.createElement('div');
+        div.className = 'message-item';
+        div.style.border = '1px solid #ccc';
+        div.style.padding = '10px';
+        div.style.marginBottom = '8px';
+        div.style.position = 'relative';
 
-  const data = {
-    name: form.name.value,
-    email: form.email.value,
-    phone: form.phone.value,
-    message: form.message.value,
-  };
-
- fetch('https://portfolio-backends-ten.vercel.app/api/send-message', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    name: 'Umarxon',
-    email: 'umar@example.com',
-    phone: '998901234567',
-    message: 'Salom, bu test xabar!',
-  }),
-})
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      alert("Успешно отправлено ✅");
-    } else {
-      alert("Произошла ошибка ❌");
+        div.innerHTML = `
+          <strong>Ism:</strong> ${msg.name} <br>
+          <strong>Email:</strong> ${msg.email} <br>
+          <strong>Telefon:</strong> ${msg.phone} <br>
+          <strong>Xabar:</strong> ${msg.message}
+          <button class="delete-btn" data-index="${index}" style="
+            position: absolute; right: 10px; top: 10px;
+            background-color: #ff4d4d; border: none; color: white;
+            padding: 5px 8px; cursor: pointer; border-radius: 4px;
+          ">Delete</button>
+        `;
+        messagesList.appendChild(div);
+      });
     }
-  })
-  .catch(error => {
-    console.error(error);
-    alert("Произошла ошибка при отправке ❌");
-  });
-  e.reset()
-});
 
+    messagesList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-btn')) {
+        const index = e.target.getAttribute('data-index');
+        let messages = JSON.parse(localStorage.getItem('messages')) || [];
+        messages.splice(index, 1);
+        localStorage.setItem('messages', JSON.stringify(messages));
+        loadMessages();
+      }
+    });
+
+    function showCustomAlert(message) {
+      customAlert.textContent = message;
+      customAlert.classList.add('show');
+
+      setTimeout(() => {
+        customAlert.classList.remove('show');
+      }, 2000); // 2 sekund ko'rinadi
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newMessage = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        message: form.message.value.trim(),
+      };
+
+      if (!newMessage.name || !newMessage.email || !newMessage.phone || !newMessage.message) {
+        alert('Iltimos, barcha maydonlarni to‘ldiring!');
+        return;
+      }
+
+      const messages = JSON.parse(localStorage.getItem('messages')) || [];
+      messages.push(newMessage);
+      localStorage.setItem('messages', JSON.stringify(messages));
+
+      form.reset();
+      loadMessages();
+
+      showCustomAlert('✅ Message sent successfully!');
+    });
+
+    window.addEventListener('DOMContentLoaded', loadMessages);
